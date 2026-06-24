@@ -652,6 +652,7 @@ const COMPLETE_EVENTS = buildCompleteEventsList();
 
 function App() {
   const [activeTab, setActiveTab] = useState('Home')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSlide, setActiveSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [activeAnnouncement, setActiveAnnouncement] = useState(0)
@@ -985,6 +986,11 @@ function App() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
+    
+    // Construct the mailto URL to send to 25cs154@rmd.ac.in
+    const mailtoUrl = `mailto:25cs154@rmd.ac.in?subject=${encodeURIComponent(contactForm.subject)}&body=${encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\nMessage:\n${contactForm.message}`)}`
+    window.location.href = mailtoUrl
+
     setFormSubmitted(true)
     setTimeout(() => {
       setContactForm({ name: '', email: '', subject: '', message: '' })
@@ -1159,8 +1165,65 @@ function App() {
               </>
             )}
           </div>
+
+          {/* Hamburger Menu Toggle Button */}
+          <button 
+            className={`hamburger-btn ${isMobileMenuOpen ? 'active' : ''}`} 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
         </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <div className={`mobile-drawer-overlay ${isMobileMenuOpen ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
+        <div className={`mobile-drawer ${isMobileMenuOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+          <div className="mobile-drawer-header">
+            <img src="/evenza_logo_text.png" alt="Evenza" className="mobile-drawer-logo" />
+            <button className="mobile-drawer-close" onClick={() => setIsMobileMenuOpen(false)} aria-label="Close menu">&times;</button>
+          </div>
+          <nav className="mobile-nav-links">
+            {navigationItems.map((item) => (
+              <button
+                key={item}
+                className={`mobile-nav-link-btn ${activeTab === item ? 'active' : ''}`}
+                onClick={() => {
+                  handleNavClick(item)
+                  setIsMobileMenuOpen(false)
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
+          <div className="mobile-auth-group">
+            {loggedInUser ? (
+              <div className="mobile-user-profile">
+                <span className="mobile-user-name">Hi, {loggedInUser.name}</span>
+                <button className="mobile-btn-logout" onClick={() => {
+                  handleLogout()
+                  setIsMobileMenuOpen(false)
+                }}>Logout</button>
+              </div>
+            ) : (
+              <div className="mobile-auth-buttons">
+                <button className="mobile-btn-login" onClick={() => {
+                  setIsLoginOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}>Login</button>
+                <button className="mobile-btn-register" onClick={() => {
+                  setIsRegisterOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}>Register</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Main Content Sections */}
       <main className="main-content">
@@ -1532,7 +1595,7 @@ function App() {
                     </div>
                     <div className="info-text">
                       <h4>Email Support</h4>
-                      <p>support@evenza.edu</p>
+                      <p><a href="mailto:25cs154@rmd.ac.in" style={{ color: 'var(--accent-cyan)', textDecoration: 'underline' }}>25cs154@rmd.ac.in</a></p>
                     </div>
                   </div>
 
