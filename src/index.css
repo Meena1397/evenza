@@ -1,20 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-dark: #060713;
-  --bg-nav: rgba(6, 7, 19, 0.75);
-  --bg-card: #101223;
+  --bg-dark: #030510;
+  --bg-nav: rgba(3, 5, 16, 0.8);
+  --bg-card: #080d22;
   --bg-card-white: #ffffff;
-  --bg-card-hover: #181b32;
+  --bg-card-hover: #0e1533;
   --text-primary: #ffffff;
   --text-secondary: #94a3b8;
   --text-dark: #0f172a;
   --text-muted-dark: #475569;
   
   --accent-cyan: #00d2ff;
+  --accent-blue: #0066ff;
   --accent-purple: #7a22ff;
+  --accent-orange: #ff6b00;
+  --accent-yellow: #ffd700;
+  --accent-magenta: #ff007f;
+  
   --gradient-primary: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
-  --gradient-glow: radial-gradient(circle, rgba(122, 34, 255, 0.15) 0%, rgba(6, 7, 19, 0) 70%);
+  --gradient-orange: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-magenta) 100%);
+  --gradient-glow: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, rgba(3, 5, 16, 0) 70%);
   
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
