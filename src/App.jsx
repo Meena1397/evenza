@@ -653,6 +653,7 @@ const COMPLETE_EVENTS = buildCompleteEventsList();
 function App() {
   const [activeTab, setActiveTab] = useState('Home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFormSending, setIsFormSending] = useState(false)
   const [activeSlide, setActiveSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [activeAnnouncement, setActiveAnnouncement] = useState(0)
@@ -986,16 +987,39 @@ function App() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
-    
-    // Construct the mailto URL to send to 25cs154@rmd.ac.in
-    const mailtoUrl = `mailto:25cs154@rmd.ac.in?subject=${encodeURIComponent(contactForm.subject)}&body=${encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\nMessage:\n${contactForm.message}`)}`
-    window.location.href = mailtoUrl
+    setIsFormSending(true)
 
-    setFormSubmitted(true)
-    setTimeout(() => {
-      setContactForm({ name: '', email: '', subject: '', message: '' })
-      setFormSubmitted(false)
-    }, 3000)
+    fetch("https://formsubmit.co/ajax/25cs154@rmd.ac.in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        name: contactForm.name,
+        email: contactForm.email,
+        subject: contactForm.subject,
+        message: contactForm.message,
+        _subject: `New Evenza Contact Query: ${contactForm.subject}`
+      })
+    })
+      .then((res) => {
+        setIsFormSending(false)
+        if (res.ok) {
+          setFormSubmitted(true)
+          setTimeout(() => {
+            setContactForm({ name: '', email: '', subject: '', message: '' })
+            setFormSubmitted(false)
+          }, 3000)
+        } else {
+          alert("Oops! There was an issue sending your message. Please try again.")
+        }
+      })
+      .catch((err) => {
+        setIsFormSending(false)
+        console.error("Form submit error:", err)
+        alert("Oops! Network error. Please check your connection and try again.")
+      })
   }
 
   // Navigation handlers
@@ -1566,7 +1590,9 @@ function App() {
                           required
                         ></textarea>
                       </div>
-                      <button type="submit" className="btn-submit-form">SEND MESSAGE</button>
+                      <button type="submit" className="btn-submit-form" disabled={isFormSending}>
+                        {isFormSending ? 'SENDING...' : 'SEND MESSAGE'}
+                      </button>
                     </form>
                   )}
                 </div>
